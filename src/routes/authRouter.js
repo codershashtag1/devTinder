@@ -14,9 +14,14 @@ authRouter.post('/signUp', signUpValidation, async (req, res) => {
       return res.status(400).json({ message: "Email Already Exists" })
     }
 
-    await user.save(user)
-
-    res.send("User Created Successfully")
+    let userData = await user.save(user)
+    let jwtToken = await userData.getJwtToken();
+    res.cookie('token', jwtToken, {
+      expires: new Date(Date.now() + 8 * 36000)
+    });
+    // res.send("User Login successfully")
+   
+    res.send(userData)
 
   } catch(err) {
     res.status(400).send(err.message)
@@ -28,19 +33,20 @@ authRouter.post('/login', loginValidation, async(req, res) => {
   try {
     let { email, password } = req.body
 
-    let findUser = await User.findOne({ email: email })
+    let user = await User.findOne({ email: email })
     let isPasswordValid = false
-    if (findUser) {
-      isPasswordValid = await findUser.decryptPassword(password);
+    if (user) {
+      isPasswordValid = await user.decryptPassword(password);
     }
 
-    if (!isPasswordValid || !findUser) {
+    if (!isPasswordValid || !user) {
       return res.status(400).json({ message: "Invalid Credential" })
     }
 
-    let jwtToken = await findUser.getJwtToken();
+    let jwtToken = await user.getJwtToken();
     res.cookie('token', jwtToken, { expires: new Date(Date.now() + 8 * 36000) });
-    res.send("User Login successfully")
+    // res.send("User Login successfully")
+    res.send(user)
 
   } catch(err) {
     res.status(400).send(err.message);

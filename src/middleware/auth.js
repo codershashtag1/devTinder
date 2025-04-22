@@ -5,7 +5,7 @@ const auth = async (req, res, next) => {
   try {
     let { token } = req.cookies;
     if(!token) {
-      return res.status(400).send("Please Login")
+      return res.status(401).send("Please Login")
     }
 
     let decodedJwtToken = await jwt.verify(token, process.env.jwt_Secret_key);

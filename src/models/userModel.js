@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -31,8 +32,27 @@ const userSchema = new mongoose.Schema({
     cast: '{VALUE} is not a number',
     maxlength: 3
   },
+  gender: {
+    type: String,
+    require: true,
+    enum: {
+      values: ['Male', 'Female', 'Others'],
+      message: `{VALUE} is not allowed`
+    }
+  },
   photoUrl: {
-    type: String
+    type: String,
+    default: "https://geographyandyou.com/images/user-profile.png",
+    require: true,
+    validate(value) {
+      if (!validator.isURL(value)) {
+        throw new Error("Invalid Photo Url: ", + value)
+      }
+    }
+  },
+  about: {
+    type: String,
+    default: 'This is a default about of the user'
   }
 }, {
   timestamps: true

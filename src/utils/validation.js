@@ -4,20 +4,16 @@ const signUpValidation = (req, res, next) => {
   try {
     let { email, password, skills } = req.body
 
-    let requiredFields = ["firstName", "lastName", "email", "password", "skills", "age"];
+    let requiredFields = ["firstName", "lastName", "email", "password"];
     let result = requiredFieldValidation(req.body, requiredFields);
     if(!result.status) {
-      res.status(400).json({
+      return res.status(400).json({
         message: result.message
       });
     }
 
     if (!validator.isEmail(email)) res.status(400).json({ message: "Email is invalid"})
     if (!validator.isStrongPassword(password)) res.status(400).json({ message: "Weak Password"});
-    if (!skills || skills.length == 0) {
-      res.status(400).json({message: "Please Enter atleast One Skill"})
-    }
-
     next();
     
   } catch(err) {
@@ -47,7 +43,7 @@ const editProfileValidation = (req, res, next) => {
 
     let { skills } = req.body
 
-    let requiredFields = ["firstName", "lastName", "skills", "age"];
+    let requiredFields = ["firstName", "lastName", "age", "gender", "about", "photoUrl"];
     let result = requiredFieldValidation(req.body, requiredFields);
     if (!result.status) {
       return res.status(400).json({
@@ -55,11 +51,11 @@ const editProfileValidation = (req, res, next) => {
       });
     }
 
-    if (!skills || skills.length == 0) {
-      res.status(400).json({
-        message: "Please Enter atleast One Skill"
-      })
-    }
+    // if (!skills || skills.length == 0) {
+    //   return res.status(400).json({
+    //     message: "Please Enter atleast One Skill"
+    //   })
+    // }
     
     next()
 

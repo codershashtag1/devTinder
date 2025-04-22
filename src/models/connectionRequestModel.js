@@ -29,5 +29,14 @@ connectionRequest.index({
 });
 
 
+connectionRequest.pre("save", function (next) {
+  const connectionReq = this;
+  // Check if the fromUserId is same as toUserId
+  if (connectionReq.fromUserId.equals(connectionReq.toUserId)) {
+    throw new Error("Cannot send connection request to yourself!");
+  }
+  next();
+});
+
 
 module.exports = mongoose.model('ConnectionRequest', connectionRequest)

@@ -15,11 +15,8 @@ userRouter.get('/requests/received', auth, async (req, res) => {
       status: 'interested'
     }).populate('fromUserId', USER_SAFE_DATA)
 
-    if (requestReceived.length > 0) {
-      res.json(requestReceived)
-    } else {
-      res.status(400).json({ message: "No Request Found" })
-    }
+  
+    res.send(requestReceived)
 
   } catch(err) {
     res.status(400).send(err.message)
@@ -90,16 +87,13 @@ userRouter.get('/feed', auth, async (req, res) => {
 
     let user = await User.find({
       $and : [
+        { _id: { $nin: Array.from(hideUserFromFeed) } },
         { _id: { $ne: loggedInUser._id } },
-        { _id: { $nin: Array.from(hideUserFromFeed) } }
       ],
     }).select(USER_SAFE_DATA).skip(skip).limit(limit)
 
     if (user.length > 0) {
-      res.json({
-        data: user,
-        message: 'Connection Found'
-      })
+      res.send(user)
     } else {
       res.json({ message: 'No Connection Found'})
     }

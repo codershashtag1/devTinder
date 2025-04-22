@@ -5,6 +5,7 @@ const connectDB = require('./src/config/dbConnection');
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser')
+const cors = require('cors');
 
 const User = require('./src/models/userModel')
 const ConnectionRequest = require('./src/models/connectionRequestModel')
@@ -14,6 +15,15 @@ const profileRouter = require('./src/routes/profileRouter')
 const connectionRequestRouter = require('./src/routes/connectionRequestRouter')
 const userRouter = require('./src/routes/userRouter')
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
+
+// app.use(cors({
+//   origin: ['http://localhost:5173/', 'http://localhost:7777/'],
+//   credentials: true
+// }))
 app.use(express.json());
 app.use(cookieParser())
 

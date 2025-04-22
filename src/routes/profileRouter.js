@@ -37,8 +37,14 @@ profileRouter.patch('/edit', editProfileValidation , auth, async (req, res) => {
     }
 
     if(Object.keys(updateFields).length > 0) {
-      await User.updateOne({ _id: loggedinUser._id }, updateFields)
-      return res.status(400).send({ message: "Profile Updated Succesfully"})
+      const updatedUser = await User.findByIdAndUpdate(
+        loggedinUser._id,
+        updateFields, {
+          new: true
+        }
+      )
+      // await User.updateOne({ _id: loggedinUser._id }, updateFields)
+      return res.send(updatedUser)
     } else {
       return res.status(400).send({ message: "No Change Found"})
     }
