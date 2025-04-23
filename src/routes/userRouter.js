@@ -92,11 +92,7 @@ userRouter.get('/feed', auth, async (req, res) => {
       ],
     }).select(USER_SAFE_DATA).skip(skip).limit(limit)
 
-    if (user.length > 0) {
-      res.send(user)
-    } else {
-      res.json({ message: 'No Connection Found'})
-    }
+    res.send(user)
 
   } catch(err) {
     res.status(400).send(err.message);

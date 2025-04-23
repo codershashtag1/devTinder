@@ -46,7 +46,7 @@ profileRouter.patch('/edit', editProfileValidation , auth, async (req, res) => {
       // await User.updateOne({ _id: loggedinUser._id }, updateFields)
       return res.send(updatedUser)
     } else {
-      return res.status(400).send({ message: "No Change Found"})
+      return res.status(400).send("No Change Found")
     }
 
   } catch(err) {
