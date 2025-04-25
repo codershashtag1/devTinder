@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 const ConnectionRequest = require('../models/connectionRequestModel')
 const User = require('../models/userModel.js');
 const { connection } = require('mongoose');
+const ses_sendEmail = require('../utils/ses_sendEmail.js');
 
 
 connectionRequestRouter.post('/send/:status/:userId', auth, async (req, res) => {
@@ -39,6 +40,9 @@ connectionRequestRouter.post('/send/:status/:userId', auth, async (req, res) => 
     })
 
     await connectionRequest.save()
+
+    let data = await ses_sendEmail.run(`Request send to User ${isRequestSendToUserPresent.firstName}`);
+    console.log(data);
 
     res.json({
       message: `Request send to User ${isRequestSendToUserPresent.firstName}`
