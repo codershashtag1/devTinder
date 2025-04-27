@@ -15,6 +15,8 @@ const profileRouter = require('./src/routes/profileRouter')
 const connectionRequestRouter = require('./src/routes/connectionRequestRouter')
 const userRouter = require('./src/routes/userRouter')
 
+require('./src/utils/cron.js')
+
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
