@@ -59,20 +59,16 @@ paymentRouter.post('/webhook', async(req, res) => {
 
     // Update payment status 
     let paymentDetails = req.body.payload.payment.entity
-    console.log("-----------paymentDetails");
-    console.log(paymentDetails);
-    let payment = await Payment.find({
+    let payment = await Payment.findOne({
       orderId: paymentDetails.order_id
     })
     payment.status = paymentDetails.status
-    console.log(paymentDetails.status)
     payment.paymentId = paymentDetails.id
-    console.log(paymentDetails.id)
     await payment.save()
 
     console.log(payment);
 
-    let user = await User.find(payment.userId)
+    let user = await User.findById(payment.userId)
     user.isPremium = true;
     user.memberShip = payment.notes.memberShip
     await user.save()
