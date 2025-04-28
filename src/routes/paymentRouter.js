@@ -55,6 +55,8 @@ paymentRouter.post('/webhook', async(req, res) => {
       res.status(400).json({msg: "WebHook Invalid"})
     }
 
+    console.log(isWebHookValid);
+
     // Update payment status 
     let paymentDetails = req.body.payload.payment.entity
     let payment = await Payment.find({
@@ -64,10 +66,14 @@ paymentRouter.post('/webhook', async(req, res) => {
     payment.paymentId = paymentDetails.id
     await payment.save()
 
+    console.log(payment);
+
     let user = await User.find(payment.userId)
     user.isPremium = true;
     user.memberShip = payment.notes.memberShip
     await user.save()
+
+    console.log(user)
 
     return res.send("Valid Webhook")
 
