@@ -7,13 +7,11 @@ const app = express();
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
 
-const User = require('./src/models/userModel')
-const ConnectionRequest = require('./src/models/connectionRequestModel')
-
 const authRouter = require('./src/routes/authRouter')
 const profileRouter = require('./src/routes/profileRouter')
 const connectionRequestRouter = require('./src/routes/connectionRequestRouter')
 const userRouter = require('./src/routes/userRouter')
+const paymentRouter = require('./src/routes/paymentRouter')
 
 require('./src/utils/cron.js')
 
@@ -33,6 +31,7 @@ app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/request', connectionRequestRouter);
 app.use('/user', userRouter);
+app.use('/payment', paymentRouter);
 
 
 connectDB().then(() => {
