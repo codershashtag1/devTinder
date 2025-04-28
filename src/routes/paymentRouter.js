@@ -85,6 +85,7 @@ paymentRouter.post('/webhook', async(req, res) => {
 paymentRouter.get('/verifyPremiumUser', auth, (req, res) => {
   try {
     let user = req.user
+    console.log(user);
     return res.json({ isPremium: user.isPremium })
 
   } catch(err) {
